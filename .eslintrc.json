@@ -4,7 +4,7 @@
   "rules": {
     "simple-import-sort/imports": "error",
     "prettier/prettier": ["error", {
-      "printWidth": 180,
+      "printWidth": 160,
       "singleQuote": true
     }]
   }
