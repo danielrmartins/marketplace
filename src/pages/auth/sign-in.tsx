@@ -1,11 +1,15 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation } from '@tanstack/react-query';
 import { Helmet } from 'react-helmet-async';
 import { useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 import { z } from 'zod';
 
-import { ButtonWithIcon } from '@/components/button-with-icon/button-with-icon';
+import { signIn } from '@/api/sign-in';
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import ArrowRight02Icon from '@/icons/arrow-right-02-stroke-rounded';
 
 const signInForm = z.object({
   email: z.string().email({ message: 'email inválido' }),
@@ -21,15 +25,28 @@ export function SignIn() {
     formState: { isSubmitting, errors },
   } = useForm<SignInForm>({ resolver: zodResolver(signInForm) });
 
+  const navigate = useNavigate();
+
+  const { mutateAsync: authenticate } = useMutation({ mutationFn: signIn });
+
   async function handleSignIn(data: SignInForm) {
-    console.log(data);
-    console.log(errors);
+    try {
+      await authenticate(data);
+
+      navigate('/');
+    } catch (error) {
+      toast.error('E-mail ou senha inválidos');
+    }
+  }
+
+  function handleSignUp() {
+    navigate('/sign-up');
   }
 
   return (
     <>
       <Helmet title="Login" />
-      <div className="flex h-full w-full flex-col justify-between rounded-3xl border px-16 py-20">
+      <div className="flex h-full w-full flex-col justify-between rounded-3xl bg-white px-16 py-20">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">Acesse sua conta</h1>
           <p>Informe seu e-mail e senha para entrar</p>
@@ -44,28 +61,24 @@ export function SignIn() {
               <Input id="password" type="password" placeholder="Sua senha de acesso" icon="password" label="senha" {...register('password')} />
               {errors.password && <span className="text-xs text-red-500">{errors.password.message}</span>}
             </div>
-            <ButtonWithIcon
-              type="submit"
-              text="Acessar"
-              disabled={isSubmitting}
-              className="flex w-full justify-between text-base"
-              size="lg"
-              iconColor="text-white"
-            />
+            <Button className="flex w-full justify-between text-base" size="lg" disabled={isSubmitting} type="submit">
+              Acessar
+              <ArrowRight02Icon className="h-6 w-6 text-white" />
+            </Button>
           </form>
         </div>
         <div>
           <h2 className="pb-2 text-base tracking-tight">Ainda não tem uma conta?</h2>
-          <Link to="/sign-up">
-            <ButtonWithIcon
-              className="flex w-full justify-between border border-orange-500 bg-white text-base text-orange-500"
-              size="lg"
-              variant="secondary"
-              type="button"
-              text="Cadastrar"
-              iconColor="text-orange-500"
-            />
-          </Link>
+          <Button
+            variant="secondary"
+            className="flex w-full justify-between border border-orange-500 bg-white text-base text-orange-500"
+            size="lg"
+            type="button"
+            onClick={handleSignUp}
+          >
+            Cadastrar
+            <ArrowRight02Icon className="h-6 w-6 text-orange-500" />
+          </Button>
         </div>
       </div>
     </>

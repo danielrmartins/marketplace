@@ -2,12 +2,12 @@ import * as React from 'react';
 
 import { cn } from '@/lib/utils';
 
-import AccessIcon from '../access-stroke-rounded';
-import CallIcon from '../call-stroke-rounded';
-import Mail02Icon from '../mail-02-stroke-rounded';
-import UserIcon from '../user-stroke-rounded';
-import ViewOffIcon from '../view-off-stroke-rounded';
-import ViewIcon from '../view-stroke-rounded';
+import AccessIcon from '../../icons/access-stroke-rounded';
+import CallIcon from '../../icons/call-stroke-rounded';
+import Mail02Icon from '../../icons/mail-02-stroke-rounded';
+import UserIcon from '../../icons/user-stroke-rounded';
+import ViewOffIcon from '../../icons/view-off-stroke-rounded';
+import ViewIcon from '../../icons/view-stroke-rounded';
 import { Label } from './label';
 
 type iconProps = 'email' | 'password' | 'user' | 'phone';

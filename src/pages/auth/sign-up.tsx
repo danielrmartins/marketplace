@@ -1,12 +1,16 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useEffect } from 'react';
+import { useMutation } from '@tanstack/react-query';
 import { Helmet } from 'react-helmet-async';
 import { useForm } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 import { z } from 'zod';
 
-import { ButtonWithIcon } from '@/components/button-with-icon/button-with-icon';
+import { createSeller } from '@/api/create-seller';
+import { uploadFile } from '@/api/upload-file';
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import ArrowRight02Icon from '@/icons/arrow-right-02-stroke-rounded';
 
 const ACCEPTED_IMAGE_TYPES = ['image/png'];
 
@@ -20,6 +24,7 @@ const signUpForm = z
     email: z.string().email(),
     password: z.string().min(6),
     passwordConfirmation: z.string().min(6),
+    avatarId: z.string().optional(),
     file: z
       .custom<FileList>()
       .refine((files) => {
@@ -50,18 +55,51 @@ export function SignUp() {
     formState: { errors, isSubmitting },
   } = useForm<SignUpForm>({ resolver: zodResolver(signUpForm), reValidateMode: 'onSubmit' });
 
+  const navigate = useNavigate();
+
+  const { mutateAsync: createSellerFn, isPending: isCreating } = useMutation({ mutationFn: createSeller });
+
+  const { mutateAsync: uploadFileFn } = useMutation({ mutationFn: uploadFile });
+
   async function handleSignUp(data: SignUpForm) {
-    console.log(data);
-    console.log(errors.root);
+    try {
+      if (data.file.length && data.file.length > 0) {
+        const { data: uploadedFile } = await uploadFileFn(data.file[0]);
+
+        data.avatarId = uploadedFile.attachments[0].id;
+
+        if (data.avatarId) {
+          await createSellerFn({
+            name: data.name,
+            phone: data.phone,
+            email: data.email,
+            password: data.password,
+            passwordConfirmation: data.passwordConfirmation,
+            avatarId: data.avatarId,
+          });
+        }
+      }
+
+      toast.success('Conta criada com sucesso', {
+        action: {
+          label: 'Acessar',
+          onClick: () => navigate('/sign-in'),
+        },
+      });
+    } catch (error) {
+      console.log(error);
+      toast.error('Erro ao criar conta');
+    }
   }
 
-  useEffect(() => {
-    console.log(errors);
-  }, [errors]);
+  const handleSignIn = () => {
+    navigate('/sign-in');
+  };
+
   return (
     <>
       <Helmet title="Cadastro" />
-      <div className="flex h-full w-full flex-col justify-between rounded-3xl border px-16 py-20">
+      <div className="flex h-full w-full flex-col justify-between rounded-3xl bg-white px-16 py-20">
         <div>
           <h1 className="text-2xl font-semibold tracking-tight">Crie sua conta</h1>
           <p>Informe os seus dados pessoais e de acesso</p>
@@ -102,28 +140,24 @@ export function SignUp() {
             {errors.passwordConfirmation && <span className="text-xs text-red-500">{errors.passwordConfirmation.message}</span>}
           </div>
 
-          <ButtonWithIcon
-            type="submit"
-            text="Cadastrar"
-            disabled={isSubmitting}
-            className="flex w-full justify-between text-base"
-            size="lg"
-            iconColor="text-white"
-          />
+          <Button type="submit" disabled={isSubmitting || isCreating} className="flex w-full justify-between text-base" size="lg">
+            Cadastrar
+            <ArrowRight02Icon className="h-6 w-6 text-white" />
+          </Button>
         </form>
 
         <div className="pt-10">
           <h2>Já tem uma conta?</h2>
-          <Link to="/sign-in">
-            <ButtonWithIcon
-              className="flex w-full justify-between border border-orange-500 bg-white text-base text-orange-500"
-              size="lg"
-              variant="secondary"
-              type="button"
-              text="Acessar"
-              iconColor="text-orange-500"
-            />
-          </Link>
+          <Button
+            onClick={handleSignIn}
+            className="flex w-full justify-between border border-orange-500 bg-white text-base text-orange-500"
+            size="lg"
+            variant="secondary"
+            type="button"
+          >
+            Acessar
+            <ArrowRight02Icon className="h-6 w-6 text-orange-500" />
+          </Button>
         </div>
       </div>
     </>
