@@ -14,7 +14,7 @@ export function Header() {
   const { pathname } = useLocation();
 
   function handleNewProduct() {
-    navigate('/new-products');
+    navigate('/products/new');
   }
 
   return (
