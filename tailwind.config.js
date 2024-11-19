@@ -9,10 +9,25 @@ export default {
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
       },
+      fontFamily: {
+        poppins: ['Poppins', 'sans-serif'],
+        'dm-sans': ['DM Sans', 'sans-serif'],
+      },
+      fontSize: {
+        xxs: '0.625rem',
+      },
       colors: {
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         'base-background': 'hsl(var(--base-background))',
+        'blue-light': 'hsl(var(--blue-light))',
+        'blue-dark': 'hsl(var(--blue-dark))',
+        'gray-500': 'hsl(var(--gray-500))',
+        'gray-400': 'hsl(var(--gray-400))',
+        'gray-300': 'hsl(var(--gray-300))',
+        'gray-200': 'hsl(var(--gray-200))',
+        'orange-base': 'hsl(var(--orange-base))',
+        shape: 'hsl(var(--shape))',
         card: {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))',
