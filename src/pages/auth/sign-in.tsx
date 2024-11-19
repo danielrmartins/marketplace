@@ -48,8 +48,8 @@ export function SignIn() {
       <Helmet title="Login" />
       <div className="flex h-full w-full flex-col justify-between rounded-3xl bg-white px-16 py-20">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Acesse sua conta</h1>
-          <p>Informe seu e-mail e senha para entrar</p>
+          <h1 className="font-dm-sans text-2xl font-bold text-gray-500">Acesse sua conta</h1>
+          <p className="font-poppins text-sm text-gray-300">Informe seu e-mail e senha para entrar</p>
         </div>
         <div>
           <form className="space-y-6" onSubmit={handleSubmit(handleSignIn)}>
@@ -68,10 +68,10 @@ export function SignIn() {
           </form>
         </div>
         <div>
-          <h2 className="pb-2 text-base tracking-tight">Ainda não tem uma conta?</h2>
+          <h2 className="pb-2 font-poppins text-base text-gray-300">Ainda não tem uma conta?</h2>
           <Button
             variant="secondary"
-            className="flex w-full justify-between border border-orange-500 bg-white text-base text-orange-500"
+            className="flex w-full justify-between border border-orange-base bg-white text-base text-orange-base"
             size="lg"
             type="button"
             onClick={handleSignUp}

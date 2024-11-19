@@ -101,12 +101,12 @@ export function SignUp() {
       <Helmet title="Cadastro" />
       <div className="flex h-full w-full flex-col justify-between rounded-3xl bg-white px-16 py-20">
         <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Crie sua conta</h1>
-          <p>Informe os seus dados pessoais e de acesso</p>
+          <h1 className="font-dm-sans text-2xl font-bold text-gray-500">Crie sua conta</h1>
+          <p className="font-poppins text-sm text-gray-300">Informe os seus dados pessoais e de acesso</p>
         </div>
         <form className="gap-2 space-y-8" onSubmit={handleSubmit(handleSignUp)}>
           <div>
-            <p className="py-6 text-xl font-semibold tracking-tight">Perfil</p>
+            <p className="py-6 font-dm-sans text-lg font-bold text-gray-500">Perfil</p>
             <input id="file" type="file" accept="image/png" {...register('file')} />
             {errors.file && <span className="text-xs text-red-500">{errors.file.message}</span>}
           </div>
@@ -120,7 +120,7 @@ export function SignUp() {
           </div>
 
           <div>
-            <p className="pb-8 text-xl font-semibold tracking-tight">Acesso</p>
+            <p className="pb-8 font-dm-sans text-lg font-bold text-gray-500">Acesso</p>
             <Input id="email" type="email" placeholder="Seu nome completo" icon="email" label="email" {...register('email')} />
             {errors.email && <span className="text-xs text-red-500">{errors.email.message}</span>}
           </div>
@@ -147,7 +147,7 @@ export function SignUp() {
         </form>
 
         <div className="pt-10">
-          <h2>Já tem uma conta?</h2>
+          <h2 className="pb-2 font-poppins text-base text-gray-300">Já tem uma conta?</h2>
           <Button
             onClick={handleSignIn}
             className="flex w-full justify-between border border-orange-500 bg-white text-base text-orange-500"
